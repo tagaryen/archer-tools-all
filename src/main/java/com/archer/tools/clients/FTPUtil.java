@@ -1,9 +1,13 @@
 package com.archer.tools.clients;
 
-import com.jcraft.jsch.*;
-
 import java.io.InputStream;
-import java.util.UUID;
+
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
 
 public class FTPUtil {
 
@@ -76,8 +80,7 @@ public class FTPUtil {
             if(path != null) {
                 sftpChannel.cd(path);
             }
-            String newFile = toNewFileName(filename);
-            sftpChannel.put(fileStream, newFile);
+            sftpChannel.put(fileStream, filename);
             sftpChannel.exit();
         } catch (SftpException | JSchException e) {
         	throw e;
@@ -86,15 +89,5 @@ public class FTPUtil {
                 session.disconnect();
         	}
         }
-    }
-
-    private static String toNewFileName(String file) {
-        String[] splits = file.split("/");
-        String finalFile = splits[splits.length-1];
-        int idx = finalFile.lastIndexOf('.');
-        if(idx < 0 || idx >= finalFile.length() - 1) {
-            return finalFile +"-"+ UUID.randomUUID().toString();
-        }
-        return finalFile.substring(0, idx) +"-"+ UUID.randomUUID().toString() + "." + finalFile.substring(idx+1);
     }
 }
