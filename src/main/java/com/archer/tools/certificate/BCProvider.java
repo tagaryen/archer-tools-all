@@ -5,7 +5,7 @@ import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class BCProvider {
+class BCProvider {
 
 	private static volatile boolean loaded = false;
 	

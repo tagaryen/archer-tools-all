@@ -94,7 +94,7 @@ public class SubjectParam {
 	public Date getBeginDate() {
 		Date begin = null;
 		if(beginDate == null) {
-			System.out.println("beginDate is null");
+//			System.out.println("beginDate is null");
 			begin = new Date();
 		} else {
 			begin = Date.from(beginDate.atZone(ZoneId.systemDefault()).toInstant());
@@ -105,7 +105,7 @@ public class SubjectParam {
 	public Date getEndDate() {
 		Date end = null;
 		if(endDate == null) {
-			System.out.println("endDate is null");
+//			System.out.println("endDate is null");
 			end = new Date();
 		} else {
 			end = Date.from(endDate.atZone(ZoneId.systemDefault()).toInstant());
@@ -164,29 +164,29 @@ public class SubjectParam {
 	    if (this.commonName != null) {
 	    	builder.append("CN=").append(this.commonName); 
 	    } else {
-	    	System.out.println("commonName is null");
+//	    	System.out.println("commonName is null");
 	    	builder.append("CN=*.xy.com"); 
 	    }
 	    if (this.organization != null) {
 	    	builder.append(",O=").append(this.organization);
 	    } else {
-	    	System.out.println("organization is null");
+//	    	System.out.println("organization is null");
 	    	builder.append(",O=徐氏有限责任公司"); 
 	    }
 	    if (this.organizationUnit != null) {
 	        builder.append(",OU=").append(this.organizationUnit);
 	    } else {
-	    	System.out.println("organizationUnit is null");
+//	    	System.out.println("organizationUnit is null");
 	    }
 	    if (this.locality != null) {
 	        builder.append(",L=").append(this.locality); 
 	    } else {
-	    	System.out.println("locality is null");
+//	    	System.out.println("locality is null");
 	    }
 	    if (this.state != null) {
 	        builder.append(",ST=").append(this.state); 
 	    } else {
-	    	System.out.println("state is null");
+//	    	System.out.println("state is null");
 	    }
 	    if (this.country != null) {
 	    	if(this.country.getBytes().length > 2) {
@@ -194,7 +194,7 @@ public class SubjectParam {
 	    	}
 	        builder.append(",C=").append(this.country); 
 	    } else {
-	    	System.out.println("country is null");
+//	    	System.out.println("country is null");
 	    }
 	    return builder.toString();
 	}
