@@ -1,8 +1,10 @@
 package com.archer.tools.clients;
 
 
+import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.GetObjectResponse;
+import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import okhttp3.OkHttpClient;
@@ -68,8 +70,11 @@ public class MinioUtil {
                 .credentials(accessKey, secretKey)
                 .httpClient((new OkHttpClient()).newBuilder().protocols(Collections.singletonList(Protocol.HTTP_1_1)).build())
                 .build();
-
+        
         try {
+            if(!client.bucketExists(BucketExistsArgs.builder().bucket(bucket).build())) {
+                client.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+            }
             client.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucket)
