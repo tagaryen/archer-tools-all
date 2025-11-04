@@ -14,13 +14,12 @@ public class JDBCUtil {
 	private static final byte[] ST = {83, 72, 79, 87, 32, 116, 97, 98, 108, 101, 115};
 	
 
-    public static boolean testConnection(String endpoint, String database, String user, String pwd) {
-    	return testConnection(endpoint, database, user, pwd, null);
+    public static boolean testMysqlConnection(String endpoint, String database, String user, String pwd) {
+    	return testMysqlConnection(endpoint, database, user, pwd, null);
     }
 	
-    public static boolean testConnection(String endpoint, String database, String user, String pwd, String table) {
+    public static boolean testMysqlConnection(String endpoint, String database, String user, String pwd, String table) {
         JdbcConnection conn = null;
-        
         try {
             String jdbcUrl = "jdbc:mysql://"+endpoint+"/"+database+"?connectTimeout=1000";
             Properties properties = new Properties();
@@ -52,4 +51,5 @@ public class JDBCUtil {
 			} catch (SQLException ignore) {}
         }
     }
+
 }

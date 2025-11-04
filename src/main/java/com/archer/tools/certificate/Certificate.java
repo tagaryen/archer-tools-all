@@ -18,32 +18,40 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 final class Certificate {
 
-	protected static X509Certificate createCaCert(String signAlg, X500Name subject, PublicKey publicKey, PrivateKey privateKey, Date startDate, Date endDate, KeyUsage usage) throws Exception {
-		X509v3CertificateBuilder jcaX509v3Cert =
-		new JcaX509v3CertificateBuilder(subject, BigInteger.valueOf(System.currentTimeMillis()), startDate, endDate, subject, publicKey);
-		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
-		jcaX509v3Cert = jcaX509v3Cert.addExtension(Extension.subjectKeyIdentifier, false, extUtils.createSubjectKeyIdentifier(publicKey))
-				.addExtension(Extension.authorityKeyIdentifier, false, extUtils.createAuthorityKeyIdentifier(publicKey));
-		jcaX509v3Cert = jcaX509v3Cert
-						.addExtension(Extension.basicConstraints, false, new BasicConstraints(true))
-						.addExtension(Extension.keyUsage, false, usage);
-	    JcaContentSignerBuilder contentSignerBuilder = new JcaContentSignerBuilder(signAlg);
-	    contentSignerBuilder.setProvider("BC");
-	    return (new JcaX509CertificateConverter()).setProvider("BC").getCertificate(jcaX509v3Cert.build(contentSignerBuilder.build(privateKey)));
+	protected static X509Certificate createCaCert(String signAlg, X500Name subject, PublicKey publicKey, PrivateKey privateKey, Date startDate, Date endDate, KeyUsage usage) throws CertificateException {
+		try {
+			X509v3CertificateBuilder jcaX509v3Cert =
+					new JcaX509v3CertificateBuilder(subject, BigInteger.valueOf(System.currentTimeMillis()), startDate, endDate, subject, publicKey);
+			JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
+			jcaX509v3Cert = jcaX509v3Cert.addExtension(Extension.subjectKeyIdentifier, false, extUtils.createSubjectKeyIdentifier(publicKey))
+					.addExtension(Extension.authorityKeyIdentifier, false, extUtils.createAuthorityKeyIdentifier(publicKey));
+			jcaX509v3Cert = jcaX509v3Cert
+							.addExtension(Extension.basicConstraints, false, new BasicConstraints(true))
+							.addExtension(Extension.keyUsage, false, usage);
+		    JcaContentSignerBuilder contentSignerBuilder = new JcaContentSignerBuilder(signAlg);
+		    contentSignerBuilder.setProvider("BC");
+		    return (new JcaX509CertificateConverter()).setProvider("BC").getCertificate(jcaX509v3Cert.build(contentSignerBuilder.build(privateKey)));
+		} catch(Exception e) {
+			throw new CertificateException(e);
+		}
 	}
 	
-	protected static X509Certificate createCert(boolean isCa, String signAlg, X500Name subject, X509Certificate issuer, PublicKey publicKey, PrivateKey privateKey, Date startDate, Date endDate, KeyUsage usage) throws Exception {
-		X509v3CertificateBuilder jcaX509v3Cert =
-		new JcaX509v3CertificateBuilder(issuer, BigInteger.valueOf(System.currentTimeMillis()), startDate, endDate, subject, publicKey);
-		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
-		jcaX509v3Cert = jcaX509v3Cert.addExtension(Extension.subjectKeyIdentifier, false, extUtils.createSubjectKeyIdentifier(publicKey))
-				.addExtension(Extension.authorityKeyIdentifier, false, extUtils.createAuthorityKeyIdentifier(issuer));
-		jcaX509v3Cert = jcaX509v3Cert
-						.addExtension(Extension.basicConstraints, false, new BasicConstraints(isCa))
-						.addExtension(Extension.keyUsage, false, usage);
-	    JcaContentSignerBuilder contentSignerBuilder = new JcaContentSignerBuilder(signAlg);
-	    contentSignerBuilder.setProvider("BC");
-	    return (new JcaX509CertificateConverter()).setProvider("BC").getCertificate(jcaX509v3Cert.build(contentSignerBuilder.build(privateKey)));
+	protected static X509Certificate createCert(boolean isCa, String signAlg, X500Name subject, X509Certificate issuer, PublicKey publicKey, PrivateKey privateKey, Date startDate, Date endDate, KeyUsage usage) throws CertificateException {
+		try {
+			X509v3CertificateBuilder jcaX509v3Cert =
+					new JcaX509v3CertificateBuilder(issuer, BigInteger.valueOf(System.currentTimeMillis()), startDate, endDate, subject, publicKey);
+			JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
+			jcaX509v3Cert = jcaX509v3Cert.addExtension(Extension.subjectKeyIdentifier, false, extUtils.createSubjectKeyIdentifier(publicKey))
+					.addExtension(Extension.authorityKeyIdentifier, false, extUtils.createAuthorityKeyIdentifier(issuer));
+			jcaX509v3Cert = jcaX509v3Cert
+							.addExtension(Extension.basicConstraints, false, new BasicConstraints(isCa))
+							.addExtension(Extension.keyUsage, false, usage);
+		    JcaContentSignerBuilder contentSignerBuilder = new JcaContentSignerBuilder(signAlg);
+		    contentSignerBuilder.setProvider("BC");
+		    return (new JcaX509CertificateConverter()).setProvider("BC").getCertificate(jcaX509v3Cert.build(contentSignerBuilder.build(privateKey)));
+		} catch(Exception e) {
+			throw new CertificateException(e);
+		}
 	}
 	
 }
